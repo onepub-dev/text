@@ -48,3 +48,16 @@ String string = '''
 ''';
 
 ```
+
+Output:
+
+```
+#3: 3. Line 3
+
+pos: 26 => loc: 3:7
+loc: 3:7 => pos: 26
+#3 = #3
+￠ found at pos: 50
+￠ found at loc: 5:11
+￠ found in line: 5. Line 5 ￠
+```
