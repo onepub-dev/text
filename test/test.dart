@@ -3,11 +3,21 @@ import "package:unittest/unittest.dart";
 
 void main() {
   var text = new Text(string);
-  expect(text.lineCount, 5, reason: "Text.lineCount");
+  expect(text.lineCount, 4, reason: "Text.lineCount");
   //
   var string2 = string.replaceAll("\n", "\r\n");
   var text2 = new Text(string2);
-  expect(text2.lineCount, 5, reason: "Text.lineCount");
+  expect(text2.lineCount, 4, reason: "Text.lineCount");
+  //
+  var text3 = new Text("");
+  expect(text3.lineCount, 0, reason: "Text.lineCount");
+  //
+  var text4 = new Text("\r");
+  expect(text4.lineCount, 1, reason: "Text.lineCount");
+  //
+  //
+  var text5 = new Text("\r ");
+  expect(text5.lineCount, 2, reason: "Text.lineCount");
   //
   var length = text2.length;
   for (var position = 0; position < length; position++) {

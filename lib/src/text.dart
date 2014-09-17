@@ -189,7 +189,7 @@ class Text {
       }
     }
 
-    if (column != 1 || c == 10 || c == 13) {
+    if (column != 1) {
       runes = new UnmodifiableListView(runes);
       var line = new Line(runes, lineNumber, start);
       var group = new GroupedRangeList<Line>(start, i, line);
