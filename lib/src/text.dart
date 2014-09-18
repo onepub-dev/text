@@ -131,7 +131,7 @@ class Text {
     var lineNumber = 1;
     var column = 1;
     var length = text.length;
-    var runes = <int>[];
+    var codePoints = <int>[];
     var i = 0;
     var pos = 0;
     var start = 0;
@@ -144,15 +144,15 @@ class Text {
         if ((c2 & 0xFC00) == 0xDC00) {
           c = 0x10000 + ((c & 0x3FF) << 10) + (c2 & 0x3FF);
           _characters[pos] = c;
-          runes.add(c);
+          codePoints.add(c);
           i++;
         } else {
           _characters[pos] = c;
-          runes.add(c);
+          codePoints.add(c);
         }
       } else {
         _characters[pos] = c;
-        runes.add(c);
+        codePoints.add(c);
       }
 
       if (c == 13) {
@@ -160,27 +160,27 @@ class Text {
           c = text.codeUnitAt(i);
           if (c == 10) {
             _characters[++pos] = c;
-            runes.add(c);
+            codePoints.add(c);
             i++;
           }
         }
 
-        runes = new UnmodifiableListView<int>(runes);
+        codePoints = new UnmodifiableListView<int>(codePoints);
         var end = i - 1;
-        var line = new Line(runes, lineNumber, start);
+        var line = new Line(codePoints, lineNumber, start);
         var group = new GroupedRangeList<Line>(start, end, line);
         _lines.addGroup(group);
         lineNumber++;
         column = 1;
         start = i;
-        runes = <int>[];
+        codePoints = <int>[];
       } else if (c == 10) {
-        runes = new UnmodifiableListView<int>(runes);
+        codePoints = new UnmodifiableListView<int>(codePoints);
         var end = i - 1;
-        var line = new Line(runes, lineNumber, start);
+        var line = new Line(codePoints, lineNumber, start);
         var group = new GroupedRangeList<Line>(start, end, line);
         _lines.addGroup(group);
-        runes = <int>[];
+        codePoints = <int>[];
         lineNumber++;
         column = 1;
         start = i;
@@ -190,8 +190,8 @@ class Text {
     }
 
     if (column != 1) {
-      runes = new UnmodifiableListView(runes);
-      var line = new Line(runes, lineNumber, start);
+      codePoints = new UnmodifiableListView<int>(codePoints);
+      var line = new Line(codePoints, lineNumber, start);
       var group = new GroupedRangeList<Line>(start, i, line);
       _lines.addGroup(group);
     }

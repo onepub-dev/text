@@ -1,5 +1,5 @@
 name: text
-version: 0.0.4
+version: 0.0.5
 author: Andrew Mezoni <andrew.mezoni@gmail.com>
 description: The package 'text' allows to get detailed information about the text such as the number of lines, lines at positions, characters at locations, locations at positions, positions at locations, and vice versa.
 homepage: https://github.com/mezoni/text
