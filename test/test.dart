@@ -10,7 +10,7 @@ void main() {
   expect(text2.lineCount, 4, reason: "Text.lineCount");
   //
   var text3 = new Text("");
-  expect(text3.lineCount, 0, reason: "Text.lineCount");
+  expect(text3.lineCount, 1, reason: "Text.lineCount");
   //
   var text4 = new Text("\r");
   expect(text4.lineCount, 1, reason: "Text.lineCount");

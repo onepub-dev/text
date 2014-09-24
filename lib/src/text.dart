@@ -125,16 +125,26 @@ class Text {
   }
 
   void _initialize(String text) {
+    var length = text.length;
     _characters = <int>[];
     _lines = new SparseList<Line>();
-    var c = -1;
     var lineNumber = 1;
     var column = 1;
-    var length = text.length;
     var codePoints = <int>[];
+    var start = 0;
+    if (length == 0) {
+      codePoints = new UnmodifiableListView<int>(codePoints);
+      var end = 0;
+      var line = new Line(codePoints, lineNumber, start);
+      var group = new GroupedRangeList<Line>(start, end, line);
+      _lines.addGroup(group);
+      _lines.freeze();
+      return;
+    }
+
+    var c = -1;
     var i = 0;
     var pos = 0;
-    var start = 0;
     _characters.length = length;
     for ( ; i < length; pos++) {
       c = text.codeUnitAt(i);
