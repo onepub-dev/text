@@ -41,6 +41,8 @@ class Location {
   final int line;
 
   Location(this.line, this.column);
+
+  String toString() => "$line:$column";
 }
 
 class Text {
