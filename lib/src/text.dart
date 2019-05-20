@@ -1,43 +1,29 @@
 part of text;
 
 class Line {
-  /**
-   * Unicode characters.
-   */
+  /// Unicode characters.
   final List<int> characters;
 
-  /**
-   * Line number.
-   */
+  /// Line number.
   final int number;
 
-  /**
-   * Start position.
-   */
+  /// Start position.
   final int start;
 
   Line(this.characters, this.number, this.start);
 
-  /**
-   * End position.
-   */
+  /// End position.
   int get end => start + length;
 
-  /**
-   * Line length.
-   */
+  /// Line length.
   int get length => characters.length;
 }
 
 class Location {
-  /**
-   * Column number.
-   */
+  /// Column number.
   final int column;
 
-  /**
-   * Line number.
-   */
+  /// Line number.
   final int line;
 
   Location(this.line, this.column);
@@ -58,70 +44,52 @@ class Text {
     _initialize(text);
   }
 
-  /**
-   * Unicode characters.
-   */
+  /// Unicode characters.
   List<int> get characters => new UnmodifiableListView<int>(_characters);
 
-  /**
-   * Number of Unicode characters.
-   */
+  /// Number of Unicode characters.
   int get length => _characters.length;
 
-  /**
-   * Number of lines.
-   */
+  /// Number of lines.
   int get lineCount => _lines.groupCount;
 
-  /**
-   * Returns an Unicode character at the specified [position].
-   *
-   * Example:
-   *     text.characterAt(0);
-   */
+  /// Returns an Unicode character at the specified [position].
+  ///
+  /// Example:
+  ///     text.characterAt(0);
   int characterAt(int position) {
     return _characters[position];
   }
 
-  /**
-   * Returns the lines at specified [index].
-   *
-   * Example:
-   *     var lineNumber = 1;
-   *     text.line(lineNumber - 1);
-   */
+  /// Returns the lines at specified [index].
+  ///
+  /// Example:
+  ///     var lineNumber = 1;
+  ///     text.line(lineNumber - 1);
   Line line(int index) {
     return _lines.groups[index].key;
   }
 
-  /**
-   * Returns the collection of text lines.
-   *
-   * Example:
-   *     var lines = text.lines;
-   */
+  /// Returns the collection of text lines.
+  ///
+  /// Example:
+  ///     var lines = text.lines;
   Iterable<Line> lines() {
     return _lines.groups.map((group) => group.key);
   }
 
-  /**
-   * Returns the line at specified character [position].
-   */
+  /// Returns the line at specified character [position].
   Line lineAt(int position) {
     return _lines[position];
   }
 
-  /**
-   * Returns the location at specified character [position].
-   */
+  /// Returns the location at specified character [position].
   Location locationAt(int position) {
     var line = this.lineAt(position);
     return new Location(line.number, position - line.start + 1);
   }
 
-  /**
-   * Returns the character position at specified [location].
-   */
+  /// Returns the character position at specified [location].
   int position(Location location) {
     return line(location.line - 1).start + location.column - 1;
   }
