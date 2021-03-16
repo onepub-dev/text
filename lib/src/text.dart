@@ -28,24 +28,21 @@ class Location {
 
   Location(this.line, this.column);
 
-  String toString() => "$line:$column";
+  @override
+  String toString() => '$line:$column';
 }
 
 class Text {
-  List<int> _characters;
+  late List<int> _characters;
 
-  SparseList<Line> _lines;
+  late SparseList<Line> _lines;
 
   Text(String text) {
-    if (text == null) {
-      throw new ArgumentError("text: $text");
-    }
-
     _initialize(text);
   }
 
   /// Unicode characters.
-  List<int> get characters => new UnmodifiableListView<int>(_characters);
+  List<int> get characters => UnmodifiableListView<int>(_characters);
 
   /// Number of Unicode characters.
   int get length => _characters.length;
@@ -79,14 +76,14 @@ class Text {
   }
 
   /// Returns the line at specified character [position].
-  Line lineAt(int position) {
+  Line? lineAt(int position) {
     return _lines[position];
   }
 
   /// Returns the location at specified character [position].
   Location locationAt(int position) {
-    var line = this.lineAt(position);
-    return new Location(line.number, position - line.start + 1);
+    var line = lineAt(position)!;
+    return Location(line.number, position - line.start + 1);
   }
 
   /// Returns the character position at specified [location].
@@ -96,17 +93,18 @@ class Text {
 
   void _initialize(String text) {
     var length = text.length;
-    _characters = <int>[];
-    _lines = new SparseList<Line>();
+    _characters = List.filled(length, 0, growable: true);
+
+    _lines = SparseList<Line>();
     var lineNumber = 1;
     var column = 1;
     var codePoints = <int>[];
     var start = 0;
     if (length == 0) {
-      codePoints = new UnmodifiableListView<int>(codePoints);
+      codePoints = UnmodifiableListView<int>(codePoints);
       var end = 0;
-      var line = new Line(codePoints, lineNumber, start);
-      var group = new GroupedRangeList<Line>(start, end, line);
+      var line = Line(codePoints, lineNumber, start);
+      var group = GroupedRangeList<Line>(start, end, line);
       _lines.addGroup(group);
       _lines.freeze();
       return;
@@ -115,8 +113,8 @@ class Text {
     var c = -1;
     var i = 0;
     var pos = 0;
-    _characters.length = length;
-    for ( ; i < length; pos++) {
+
+    for (; i < length; pos++) {
       c = text.codeUnitAt(i);
       i++;
       if ((c & 0xFC00) == 0xD800 && i < length) {
@@ -145,20 +143,20 @@ class Text {
           }
         }
 
-        codePoints = new UnmodifiableListView<int>(codePoints);
+        codePoints = UnmodifiableListView<int>(codePoints);
         var end = i - 1;
-        var line = new Line(codePoints, lineNumber, start);
-        var group = new GroupedRangeList<Line>(start, end, line);
+        var line = Line(codePoints, lineNumber, start);
+        var group = GroupedRangeList<Line>(start, end, line);
         _lines.addGroup(group);
         lineNumber++;
         column = 1;
         start = i;
         codePoints = <int>[];
       } else if (c == 10) {
-        codePoints = new UnmodifiableListView<int>(codePoints);
+        codePoints = UnmodifiableListView<int>(codePoints);
         var end = i - 1;
-        var line = new Line(codePoints, lineNumber, start);
-        var group = new GroupedRangeList<Line>(start, end, line);
+        var line = Line(codePoints, lineNumber, start);
+        var group = GroupedRangeList<Line>(start, end, line);
         _lines.addGroup(group);
         codePoints = <int>[];
         lineNumber++;
@@ -170,9 +168,9 @@ class Text {
     }
 
     if (column != 1) {
-      codePoints = new UnmodifiableListView<int>(codePoints);
-      var line = new Line(codePoints, lineNumber, start);
-      var group = new GroupedRangeList<Line>(start, i, line);
+      codePoints = UnmodifiableListView<int>(codePoints);
+      var line = Line(codePoints, lineNumber, start);
+      var group = GroupedRangeList<Line>(start, i, line);
       _lines.addGroup(group);
     }
 
